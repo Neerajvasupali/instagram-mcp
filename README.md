@@ -9,6 +9,7 @@
 [![Meta Graph API](https://img.shields.io/badge/Meta%20Graph%20API-v22.0-0081FB?style=for-the-badge&logo=meta&logoColor=white)](https://developers.facebook.com/docs/instagram-platform)
 [![RAM Footprint](https://img.shields.io/badge/Memory-~35MB%20RAM-success?style=for-the-badge&logo=speedtest&logoColor=white)](#-ultra-lightweight--hardware-friendly)
 [![Tools Built-in](https://img.shields.io/badge/Tools-31%20Production%20Tools-orange?style=for-the-badge&logo=wakatime&logoColor=white)](#-complete-31-tools-catalog)
+[![Smithery](https://smithery.ai/badge/@Neerajvasupali/instagram-mcp)](https://smithery.ai/server/@Neerajvasupali/instagram-mcp)
 [![License](https://img.shields.io/badge/License-MIT-gray?style=for-the-badge)](#)
 
 <p align="center">

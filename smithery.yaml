@@ -1,0 +1,37 @@
+startCommand:
+  type: stdio
+
+configSchema:
+  type: object
+  required:
+    - instagramAccessToken
+  properties:
+    instagramAccessToken:
+      type: string
+      description: "Meta Graph API 60-day user access token with Instagram permissions"
+    instagramAccountId:
+      type: string
+      description: "Numeric Instagram Business/Creator Account ID (optional if auto-discovering)"
+    graphApiVersion:
+      type: string
+      default: "v22.0"
+      description: "Meta Graph API version"
+
+commandFunction:
+  |- (config) => ({
+    command: 'uvx',
+    args: [
+      '--from', 'git+https://github.com/Neerajvasupali/instagram-mcp.git',
+      'instagram-mcp'
+    ],
+    env: {
+      INSTAGRAM_ACCESS_TOKEN: config.instagramAccessToken,
+      INSTAGRAM_ACCOUNT_ID: config.instagramAccountId || '',
+      GRAPH_API_VERSION: config.graphApiVersion || 'v22.0'
+    }
+  })
+
+exampleConfig:
+  instagramAccessToken: "EAAG..."
+  instagramAccountId: "17841400000000000"
+  graphApiVersion: "v22.0"
