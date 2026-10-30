@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "instagram-mcp"
+version = "0.1.0"
+description = "A production-grade Model Context Protocol (MCP) server for Instagram Graph API v22.0"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Neeraj Vasupalli", email = "neerajvasupalli200@gmail.com" },
+]
+keywords = [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "instagram",
+    "meta-graph-api",
+    "claude",
+    "cursor",
+    "ai-agent",
+    "social-media-automation",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "mcp>=2.3.0",
+    "httpx>=0.28.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Neerajvasupali/instagram-mcp"
+Repository = "https://github.com/Neerajvasupali/instagram-mcp"
+Issues = "https://github.com/Neerajvasupali/instagram-mcp/issues"
+
+[project.scripts]
+instagram-mcp = "instagram_mcp.server:main"

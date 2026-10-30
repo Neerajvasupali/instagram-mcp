@@ -3,7 +3,7 @@
 import json
 from typing import Optional
 from mcp.server.mcpserver import MCPServer
-from src.client import InstagramClient
+from instagram_mcp.client import InstagramClient
 
 
 def register_profile_tools(server: MCPServer, client: InstagramClient) -> None:

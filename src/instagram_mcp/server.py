@@ -4,8 +4,8 @@ Exposes Instagram Graph API capabilities as tools for AI agents and LLMs.
 """
 
 from mcp.server.mcpserver import MCPServer
-from src.client import InstagramClient
-from src.tools import (
+from instagram_mcp.client import InstagramClient
+from instagram_mcp.tools import (
     register_profile_tools,
     register_publishing_tools,
     register_media_tools,

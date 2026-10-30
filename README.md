@@ -256,29 +256,51 @@ GRAPH_API_VERSION=v22.0
 
 ## 🔌 Connect to Your AI Clients
 
-Replace `<PATH_TO_INSTAGRAM_MCP>` with your actual absolute project path:
-* **Windows Example:** `C:\\Users\\username\\Projects\\instagram-mcp` (or `D:\\Instagram`)
-* **macOS / Linux Example:** `/Users/username/Projects/instagram-mcp`
+You can connect this server to your AI client using either **`uvx` (Instant zero-install, recommended)** or **Local Python Environment**.
 
-### 🤖 Claude Desktop
-Add to your Claude Desktop config file:
-* **Windows Location:** `%APPDATA%\Claude\claude_desktop_config.json`
-* **macOS Location:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+---
 
-#### Windows Config:
+### Method 1: Instant Zero-Install with `uvx` (Recommended)
+
+No manual repository cloning or virtual environments required! `uvx` automatically pulls and runs the package in an isolated sandbox.
+
+#### 🤖 Claude Desktop (`claude_desktop_config.json`)
+* **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+* **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+
 ```json
 {
   "mcpServers": {
     "instagram": {
-      "command": "<PATH_TO_INSTAGRAM_MCP>\\.venv\\Scripts\\python.exe",
-      "args": ["<PATH_TO_INSTAGRAM_MCP>\\run.py"],
-      "cwd": "<PATH_TO_INSTAGRAM_MCP>"
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/Neerajvasupali/instagram-mcp.git", "instagram-mcp"],
+      "env": {
+        "INSTAGRAM_ACCESS_TOKEN": "your_long_lived_token_here",
+        "INSTAGRAM_ACCOUNT_ID": "your_numeric_account_id_here",
+        "GRAPH_API_VERSION": "v22.0"
+      }
     }
   }
 }
 ```
 
-#### macOS / Linux Config:
+#### ⚡ Cursor IDE
+Go to **Settings** $\rightarrow$ **Features** $\rightarrow$ **MCP Servers** $\rightarrow$ **Add New MCP Server**:
+* **Name:** `instagram`
+* **Type:** `command`
+* **Command:** `uvx --from git+https://github.com/Neerajvasupali/instagram-mcp.git instagram-mcp`
+
+---
+
+### Method 2: Local Python Environment (From Source)
+
+If you cloned the repository locally:
+
+Replace `<PATH_TO_INSTAGRAM_MCP>` with your actual absolute project directory:
+* **Windows Example:** `C:\\Users\\username\\Projects\\instagram-mcp` (or `D:\\Instagram`)
+* **macOS / Linux Example:** `/Users/username/Projects/instagram-mcp`
+
+#### 🤖 Claude Desktop
 ```json
 {
   "mcpServers": {
@@ -290,21 +312,13 @@ Add to your Claude Desktop config file:
   }
 }
 ```
+*(On Windows, use `<PATH_TO_INSTAGRAM_MCP>\\.venv\\Scripts\\python.exe` and `<PATH_TO_INSTAGRAM_MCP>\\run.py`)*
 
----
-
-### ⚡ Cursor IDE
-Go to **Settings** $\rightarrow$ **Features** $\rightarrow$ **MCP Servers** $\rightarrow$ **Add New MCP Server**:
-* **Name:** `instagram`
-* **Type:** `command`
+#### ⚡ Cursor IDE
 * **Command (Windows):** `<PATH_TO_INSTAGRAM_MCP>\.venv\Scripts\python.exe <PATH_TO_INSTAGRAM_MCP>\run.py`
 * **Command (macOS/Linux):** `<PATH_TO_INSTAGRAM_MCP>/.venv/bin/python <PATH_TO_INSTAGRAM_MCP>/run.py`
 
----
-
-### 🪐 Antigravity / Gemini CLI
-Add to your project config (`mcp_config.json` or `.gemini/antigravity-cli/mcp.json`):
-
+#### 🪐 Antigravity / Gemini CLI
 ```json
 {
   "mcpServers": {

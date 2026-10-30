@@ -2,7 +2,7 @@
 
 import json
 from mcp.server.mcpserver import MCPServer
-from src.client import InstagramClient
+from instagram_mcp.client import InstagramClient
 
 
 def register_discovery_tools(server: MCPServer, client: InstagramClient) -> None:
