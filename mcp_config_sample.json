@@ -1,9 +1,10 @@
 {
   "mcpServers": {
     "instagram": {
-      "command": "D:\\Instagram\\.venv\\Scripts\\python.exe",
-      "args": ["D:\\Instagram\\run.py"],
-      "cwd": "D:\\Instagram",
+      "command": "<PATH_TO_PROJECT>/.venv/bin/python",
+      "args": ["<PATH_TO_PROJECT>/run.py"],
+      "cwd": "<PATH_TO_PROJECT>",
+      "_comment_windows": "On Windows, use: <PATH_TO_PROJECT>\\.venv\\Scripts\\python.exe and <PATH_TO_PROJECT>\\run.py",
       "env": {
         "INSTAGRAM_ACCOUNT_ID": "your_account_id_here",
         "INSTAGRAM_ACCESS_TOKEN": "your_long_lived_token_here",

@@ -49,7 +49,7 @@ flowchart LR
         Anti["Antigravity / Gemini"]
     end
 
-    subgraph MCP Engine ["⚡ Instagram MCP Server (D:\\Instagram)"]
+    subgraph MCP Engine ["⚡ Instagram MCP Server (Local Process)"]
         Stdio["Standard I/O Transport (stdio)"]
         Server["MCPServer (31 Tools)"]
         Client["Async HTTP Client (httpx)"]
@@ -174,15 +174,30 @@ flowchart LR
 
 ### 1. Prerequisites
 * Python 3.10+ installed
-* An Instagram Professional (Creator or Business) Account linked to a free Facebook Page
+* A free Instagram Professional (Creator or Business) Account linked to a Facebook Page
 
-### 2. Install Project Dependencies
-Everything stays 100% project-scoped inside `D:\Instagram` — zero system pollution:
+---
 
+### 2. Clone & Install Dependencies
+Everything runs 100% project-scoped inside your virtual environment — zero global package pollution:
+
+```bash
+git clone https://github.com/Neerajvasupali/instagram-mcp.git
+cd instagram-mcp
+```
+
+#### On Windows (PowerShell / Command Prompt):
 ```powershell
-cd D:\Instagram
 python -m venv .venv
 .\.venv\Scripts\pip.exe install -r requirements.txt
+Copy-Item .env.example .env
+```
+
+#### On macOS & Linux (Bash / Zsh):
+```bash
+python3 -m venv .venv
+./.venv/bin/pip install -r requirements.txt
+cp .env.example .env
 ```
 
 ---
@@ -192,7 +207,7 @@ python -m venv .venv
 > [!NOTE]
 > All Instagram Graph API access is **100% free** for Creator and Business accounts.
 
-1. **Switch Instagram Account:** Open the Instagram mobile app $\rightarrow$ *Settings* $\rightarrow$ *Switch to Professional Account* (Creator or Business).
+1. **Switch Instagram Account:** Open the Instagram mobile app $\rightarrow$ *Settings* $\rightarrow$ *Switch to Professional Account* (choose **Creator** or **Business**).
 2. **Link a Facebook Page:** In the Instagram app $\rightarrow$ *Edit Profile* $\rightarrow$ *Page* $\rightarrow$ Connect any free Facebook Page.
 3. **Create a Free Developer App:**
    * Go to [developers.facebook.com](https://developers.facebook.com/) $\rightarrow$ **My Apps** $\rightarrow$ **Create App**.
@@ -214,13 +229,7 @@ python -m venv .venv
 
 ### 4. Configure Your `.env`
 
-Create `.env` from template:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Open `.env` and paste your token:
+Open `.env` and paste your access token:
 
 ```env
 INSTAGRAM_ACCESS_TOKEN=your_60_day_token_here
@@ -230,9 +239,16 @@ GRAPH_API_VERSION=v22.0
 
 > [!TIP]
 > **Don't know your numeric `INSTAGRAM_ACCOUNT_ID`?**  
-> Just leave it blank! The server has built-in auto-discovery. Run this command:
+> Just leave it blank! The server has built-in auto-discovery. Run the discovery tool:
+> 
+> **Windows:**
 > ```powershell
 > .\.venv\Scripts\python.exe -c "import asyncio; from src.tools.profile import *; from src.server import server; print(asyncio.run(server.call_tool('instagram_list_connected_accounts', {})))"
+> ```
+> 
+> **macOS / Linux:**
+> ```bash
+> ./.venv/bin/python -c "import asyncio; from src.tools.profile import *; from src.server import server; print(asyncio.run(server.call_tool('instagram_list_connected_accounts', {})))"
 > ```
 > It will query Meta and print your exact `INSTAGRAM_ACCOUNT_ID`! Then paste it into `.env`.
 
@@ -240,28 +256,51 @@ GRAPH_API_VERSION=v22.0
 
 ## 🔌 Connect to Your AI Clients
 
-### 🤖 Claude Desktop
-Add this snippet to your Claude Desktop config:
-* **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-* **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+Replace `<PATH_TO_INSTAGRAM_MCP>` with your actual absolute project path:
+* **Windows Example:** `C:\\Users\\username\\Projects\\instagram-mcp` (or `D:\\Instagram`)
+* **macOS / Linux Example:** `/Users/username/Projects/instagram-mcp`
 
+### 🤖 Claude Desktop
+Add to your Claude Desktop config file:
+* **Windows Location:** `%APPDATA%\Claude\claude_desktop_config.json`
+* **macOS Location:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+#### Windows Config:
 ```json
 {
   "mcpServers": {
     "instagram": {
-      "command": "D:\\Instagram\\.venv\\Scripts\\python.exe",
-      "args": ["D:\\Instagram\\run.py"],
-      "cwd": "D:\\Instagram"
+      "command": "<PATH_TO_INSTAGRAM_MCP>\\.venv\\Scripts\\python.exe",
+      "args": ["<PATH_TO_INSTAGRAM_MCP>\\run.py"],
+      "cwd": "<PATH_TO_INSTAGRAM_MCP>"
     }
   }
 }
 ```
 
+#### macOS / Linux Config:
+```json
+{
+  "mcpServers": {
+    "instagram": {
+      "command": "<PATH_TO_INSTAGRAM_MCP>/.venv/bin/python",
+      "args": ["<PATH_TO_INSTAGRAM_MCP>/run.py"],
+      "cwd": "<PATH_TO_INSTAGRAM_MCP>"
+    }
+  }
+}
+```
+
+---
+
 ### ⚡ Cursor IDE
 Go to **Settings** $\rightarrow$ **Features** $\rightarrow$ **MCP Servers** $\rightarrow$ **Add New MCP Server**:
 * **Name:** `instagram`
 * **Type:** `command`
-* **Command:** `D:\Instagram\.venv\Scripts\python.exe D:\Instagram\run.py`
+* **Command (Windows):** `<PATH_TO_INSTAGRAM_MCP>\.venv\Scripts\python.exe <PATH_TO_INSTAGRAM_MCP>\run.py`
+* **Command (macOS/Linux):** `<PATH_TO_INSTAGRAM_MCP>/.venv/bin/python <PATH_TO_INSTAGRAM_MCP>/run.py`
+
+---
 
 ### 🪐 Antigravity / Gemini CLI
 Add to your project config (`mcp_config.json` or `.gemini/antigravity-cli/mcp.json`):
@@ -270,9 +309,9 @@ Add to your project config (`mcp_config.json` or `.gemini/antigravity-cli/mcp.js
 {
   "mcpServers": {
     "instagram": {
-      "command": "D:\\Instagram\\.venv\\Scripts\\python.exe",
-      "args": ["D:\\Instagram\\run.py"],
-      "cwd": "D:\\Instagram"
+      "command": "<PATH_TO_INSTAGRAM_MCP>/.venv/bin/python",
+      "args": ["<PATH_TO_INSTAGRAM_MCP>/run.py"],
+      "cwd": "<PATH_TO_INSTAGRAM_MCP>"
     }
   }
 }
