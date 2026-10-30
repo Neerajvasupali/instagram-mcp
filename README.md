@@ -73,7 +73,7 @@ flowchart LR
 
 ## 🛠️ Complete 31-Tools Catalog
 
-<details open>
+<details>
 <summary><b>1. 🔐 Authentication & Account Management (4 Tools)</b></summary>
 
 | Tool Name | Parameters | Purpose |
