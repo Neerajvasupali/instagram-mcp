@@ -43,30 +43,30 @@
 
 ```mermaid
 flowchart LR
-    subgraph AI Client ["🤖 Your AI Assistant"]
+    subgraph AI_Clients ["🤖 Your AI Assistant"]
         Claude["Claude Desktop"]
         Cursor["Cursor IDE"]
         Anti["Antigravity / Gemini"]
     end
 
-    subgraph MCP Engine ["⚡ Instagram MCP Server (Local Process)"]
+    subgraph MCP_Engine ["⚡ Instagram MCP Server"]
         Stdio["Standard I/O Transport (stdio)"]
         Server["MCPServer (31 Tools)"]
-        Client["Async HTTP Client (httpx)"]
+        Client["Async Client (httpx)"]
         Auth["Bearer Auth & Auto-Reload"]
     end
 
-    subgraph Meta API ["🌐 Meta Graph API v22.0"]
+    subgraph Meta_API ["🌐 Meta Graph API v22.0"]
         Cloud["graph.facebook.com/v22.0"]
         IG["Instagram Professional Account"]
     end
 
-    AI Client <== "JSON-RPC / stdio" ==> Stdio
+    Claude & Cursor & Anti <-->|"JSON-RPC (stdio)"| Stdio
     Stdio --> Server
     Server --> Client
     Client --> Auth
-    Auth <== "HTTPS (Bearer Token)" ==> Cloud
-    Cloud <==> IG
+    Auth <-->|"HTTPS (Bearer Token)"| Cloud
+    Cloud <--> IG
 ```
 
 ---
