@@ -80,36 +80,100 @@ D:\Instagram\
 
 ---
 
-## ⚙️ Setup & Configuration
+## ⚙️ Quick Start & Setup Instructions
 
-### 1. Fill in your `.env` file
-Open `D:\Instagram\.env` and set your credentials:
-
-```env
-INSTAGRAM_ACCOUNT_ID=your_numerical_account_id
-INSTAGRAM_ACCESS_TOKEN=your_long_lived_meta_access_token
-GRAPH_API_VERSION=v22.0
-```
-
-> **How to get your credentials:**
-> 1. Switch your Instagram account to **Professional (Creator or Business)** in the Instagram app.
-> 2. Connect a free **Facebook Page** to your Instagram account (*Edit Profile $\rightarrow$ Page*).
-> 3. Go to [Meta Graph API Explorer](https://developers.facebook.com/tools/explorer/).
-> 4. Select your Meta App, request scopes (`instagram_basic`, `instagram_content_publish`, `instagram_manage_comments`, `instagram_manage_insights`, `pages_show_list`), and generate a token.
-> 5. Query `GET /me/accounts?fields=instagram_business_account` to get your `INSTAGRAM_ACCOUNT_ID`.
+### Prerequisites
+* Python 3.10+ (Python 3.11, 3.12, 3.13, or 3.14)
+* A free Instagram Professional (Creator or Business) Account linked to a Facebook Page
 
 ---
 
-## 🧪 Testing the MCP Server Locally
-
-To test the server and verify that all 28 tools are registered:
-
+### Step 1: Clone or Open the Repository
 ```powershell
-# From D:\Instagram
-.\.venv\Scripts\python.exe -c "import asyncio; from src.server import server; asyncio.run(server.list_tools())"
+cd D:\Instagram
 ```
 
-To run the server in standard I/O mode:
+### Step 2: Set up Virtual Environment & Dependencies
+*(If you are setting this up for the first time or on a new machine)*:
+```powershell
+# Create project-local virtual environment
+python -m venv .venv
+
+# Activate environment and install dependencies
+.\.venv\Scripts\pip.exe install -r requirements.txt
+```
+
+---
+
+### Step 3: Get Your Free Meta Graph API Credentials
+
+You do **NOT** need a paid business account or credit card. Everything is 100% free:
+
+1. **Switch Instagram Account to Professional:**
+   * Open the Instagram mobile app $\rightarrow$ *Settings* $\rightarrow$ *Account Type and Tools* $\rightarrow$ *Switch to Professional Account* (choose **Creator** or **Business**).
+2. **Link a Facebook Page:**
+   * In the Instagram app $\rightarrow$ *Edit Profile* $\rightarrow$ *Page* $\rightarrow$ Create or link any free Facebook Page.
+3. **Create a Free Meta Developer App:**
+   * Go to the [Meta for Developers Portal](https://developers.facebook.com/).
+   * Click **My Apps** $\rightarrow$ **Create App**.
+   * Select **Other** as the use case $\rightarrow$ Choose **Business** app type $\rightarrow$ Give it a name (e.g., `My Instagram Assistant`).
+4. **Generate Access Token in Graph API Explorer:**
+   * Open the [Meta Graph API Explorer](https://developers.facebook.com/tools/explorer/).
+   * Under **Meta App**, select your app.
+   * Under **User or Page**, select **Get User Access Token**.
+   * Add the following permissions (scopes):
+     * `instagram_basic`
+     * `instagram_content_publish`
+     * `instagram_manage_comments`
+     * `instagram_manage_insights`
+     * `pages_show_list`
+     * `pages_read_engagement`
+   * Click **Generate Access Token** and approve the prompt.
+5. **Exchange for a 60-Day Long-Lived Token:**
+   * Click the **ℹ️ (Info)** button next to the Access Token field in Graph API Explorer $\rightarrow$ Click **Open in Access Token Tool**.
+   * Click **Extend Access Token** at the bottom to get a token valid for 60 days.
+
+---
+
+### Step 4: Configure Your Environment (`.env`)
+
+Copy `.env.example` to `.env`:
+```powershell
+Copy-Item .env.example .env
+```
+
+Open `.env` and fill in your credentials:
+```env
+# D:\Instagram\.env
+INSTAGRAM_ACCESS_TOKEN=your_long_lived_meta_access_token_here
+INSTAGRAM_ACCOUNT_ID=your_numeric_instagram_account_id_here
+GRAPH_API_VERSION=v22.0
+```
+
+> 💡 **Don't know your `INSTAGRAM_ACCOUNT_ID` yet?**  
+> Don't worry! Just fill in `INSTAGRAM_ACCESS_TOKEN` first. Then connect to your AI client or run:
+> ```powershell
+> .\.venv\Scripts\python.exe -c "import asyncio; from src.tools.profile import *; from src.server import server; print(asyncio.run(server.call_tool('instagram_list_connected_accounts', {})))"
+> ```
+> This tool will query Meta and print your exact numeric Instagram Business Account ID! Then simply copy it into `.env`.
+
+---
+
+### Step 5: Test the Server Locally
+
+Verify that all **31 tools** are registered cleanly:
+
+```powershell
+.\.venv\Scripts\python.exe -c "import asyncio; from src.server import server; tools = asyncio.run(server.list_tools()); print(f'{len(tools)} tools ready!'); [print(f' - {t.name}') for t in tools]"
+```
+
+Test your token validation:
+
+```powershell
+.\.venv\Scripts\python.exe -c "import asyncio; from src.server import server; print(asyncio.run(server.call_tool('instagram_validate_token', {})))"
+```
+
+To run the MCP server directly in standard I/O mode:
 
 ```powershell
 .\.venv\Scripts\python.exe run.py
@@ -117,9 +181,12 @@ To run the server in standard I/O mode:
 
 ---
 
-## 🔌 Connecting to MCP Clients (Claude Desktop, Antigravity, Cursor)
+## 🔌 Connecting to Your AI Clients
 
-Add the server to your MCP configuration file:
+### 1. Claude Desktop
+Add this to your Claude Desktop configuration file:
+* **Windows File Location:** `%APPDATA%\Claude\claude_desktop_config.json`
+* **macOS File Location:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ```json
 {
@@ -132,6 +199,27 @@ Add the server to your MCP configuration file:
   }
 }
 ```
+
+### 2. Antigravity / Gemini CLI
+Add to your project or user MCP configuration (`mcp_config.json` or `.gemini/antigravity-cli/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "instagram": {
+      "command": "D:\\Instagram\\.venv\\Scripts\\python.exe",
+      "args": ["D:\\Instagram\\run.py"],
+      "cwd": "D:\\Instagram"
+    }
+  }
+}
+```
+
+### 3. Cursor IDE
+Open **Cursor Settings** $\rightarrow$ **Features** $\rightarrow$ **MCP Servers** $\rightarrow$ **Add New MCP Server**:
+* **Name:** `instagram`
+* **Type:** `command`
+* **Command:** `D:\Instagram\.venv\Scripts\python.exe D:\Instagram\run.py`
 
 ---
 
